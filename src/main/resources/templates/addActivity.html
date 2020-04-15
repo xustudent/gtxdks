@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Title</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrapValidator.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrapValidator.min.js}"></script>
+
+</head>
+<body style="margin-left: 100px; margin-right: 100px; margin-top: 100px;border: 1px solid black;background: aliceblue;">
+<div style="background: blue" >
+    <span th:text="${title}" style="font-size: 20px; margin-left: 40px;color: white;"></span>
+</div>
+<form class="form-horizontal" role="form" th:method="post" th:action="@{/activity/addActivity}">
+    <div class="form-group">
+        <label for="type"  class="col-sm-2 control-label">活动类型</label>
+        <div class="col-sm-10">
+            <select id="type" class="form-control" name="type" >
+                <option value="1" th:selected="${activitiesInfo?.type=='1'}">羽毛球活动</option>
+                <option value="2" th:selected="${activitiesInfo?.type=='2'}">篮球活动</option>
+                <option value="3" th:selected="${activitiesInfo?.type=='3'}">乒乓球活动</option>
+                <option value="4" th:selected="${activitiesInfo?.type=='4'}">攀岩活动</option>
+                <option value="5" th:selected="${activitiesInfo?.type=='5'}">游泳活动</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+    <label for="starttime" class="col-sm-2 control-label">活动开始时间</label>
+    <div class="col-sm-10">
+        <input type="datetime-local" class="form-control" id="starttime" name="starttime" placeholder="请输入活动开始时间"
+               th:value="${#dates.format(activitiesInfo?.starttime,'yyyy-MM-dd')+'T'+#dates.format(activitiesInfo?.starttime,'HH:mm')}">
+    </div>
+</div>
+    <div class="form-group">
+        <label for="duration" class="col-sm-2 control-label">活动时长（小时）</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="duration" name="duration" placeholder="请输入活动时长"
+                   th:value="${activitiesInfo?.duration}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="site" class="col-sm-2 control-label">活动地点</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="site"  name="site" placeholder="请输入活动地点"
+                   th:value="${activitiesInfo?.site}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="peoples" class="col-sm-2 control-label">活动人数</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="peoples" name="peoples" placeholder="请输入活动人数"
+                   th:value="${activitiesInfo?.peoples}">
+        </div>
+    </div>
+    <div class="form-group" style="width: 500px;">
+        <label for="note" style="margin-left: 185px">备注</label>
+        <textarea  id="note" class="form-control" rows="3" style="margin-left: 240px" name="note" th:text="${activitiesInfo?.note}"></textarea>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" id="id"  name="id" th:value="${activitiesInfo?.id}">
+            <button type="submit" class="btn btn-default">保存</button>
+            <button class="btn btn-default"><a th:href="@{/index}">取消</a></button>
+        </div>
+    </div>
+</form>
+</body>
+
+<script type="text/javascript">
+    $(function () {
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                duration: {
+                    message: '活动时长只能填入正整数',
+                    validators: {
+                        notEmpty: {
+                            message: '活动时长不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[0-9]*[1-9][0-9]*$/,
+                            message: '只能填入正整数'
+                        }
+                    }
+                },
+                site: {
+                    validators: {
+                        notEmpty: {
+                            message: '活动地点不能为空'
+                        }
+                    }
+                },
+                peoples: {
+                    validators: {
+                        notEmpty: {
+                            message: '人数不可以为空'
+                        },
+                        regexp: {
+                            regexp: /^[0-9]*[1-9][0-9]*$/,
+                            message: '只能填入正整数'
+                        }
+                    }
+                },
+                starttime: {
+                    validators: {
+                        notEmpty: {
+                            message: '活动开始时间不可以为空'
+                        }
+                    }
+                }
+            }
+        });
+
+    });
+</script>
+
+</html>

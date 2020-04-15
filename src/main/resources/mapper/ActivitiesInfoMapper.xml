@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ActivityManager.mapper.ActivitiesInfoMapper">
+  <resultMap id="BaseResultMap" type="ActivityManager.model.ActivitiesInfo">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="duration" jdbcType="INTEGER" property="duration" />
+    <result column="site" jdbcType="VARCHAR" property="site" />
+    <result column="peoples" jdbcType="INTEGER" property="peoples" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+<sql id="Base_Colum_List">
+    id,type,startTime,duration,site,peoples,note
+</sql>
+
+
+
+<!--分页查询活动信息-->
+  <select id="selectAllActivitiesInfos" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Colum_List"/>
+     from activitiesInfo
+      limit #{startRows,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+   <!--查询活动总量 -->
+    <select id="selectActivitiesNum"  resultType="int">
+        select COUNT(*)
+        from activitiesInfo
+    </select>
+    <!--添加新活动-->
+  <insert id="insertActivity" parameterType="ActivityManager.model.ActivitiesInfo">
+      insert into activitiesinfo (id,type,startTime,duration,site,peoples,note)
+      values(#{id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{starttime,jdbcType=TIMESTAMP},#{duration,jdbcType=INTEGER},#{site,jdbcType=VARCHAR},#{peoples,jdbcType=INTEGER},#{note,jdbcType=VARCHAR})
+    </insert>
+    <!--更新活动-->
+    <update id="updateActivity" parameterType="ActivityManager.model.ActivitiesInfo">
+      update  activitiesinfo set  type =#{type,jdbcType=VARCHAR},startTime=#{starttime,jdbcType=TIMESTAMP},duration=#{duration,jdbcType=INTEGER},
+      site= #{site,jdbcType=VARCHAR},peoples=#{peoples,jdbcType=INTEGER},note=#{note,jdbcType=VARCHAR} where
+      id=#{id,jdbcType=VARCHAR}
+    </update>
+  <!--删除活动-->
+  <delete id="deleteActivity" parameterType="string" >
+    delete  from  activitiesinfo where  id=#{id,jdbcType=VARCHAR}
+  </delete>
+    <!--根据id查询活动信息-->
+    <select id="selectActivitiesInfoById" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Colum_List"/>
+        from activitiesInfo
+        where  id=#{id,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+
+</head>
+<body style="margin-left: 100px; margin-right: 100px;">
+<table class="table table-striped">
+    <button class="btn btn-default" style="background-color: blue;"><a th:href="@{/addActivity}" style="color: white;">新增</a></button>
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>活动类型</th>
+        <th>活动开始时间</th>
+        <th>活动结束时间</th>
+        <th>活动地点</th>
+        <th>活动人数</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="activitieInfo:${ActivitiesInfos} ">
+        <td th:text="${activitieInfoStat.count}"></td>
+        <div th:switch="${activitieInfo.type}">
+            <td th:case="1">羽毛球活动</td>
+            <td th:case="2">篮球活动</td>
+            <td th:case="3">乒乓球活动</td>
+            <td th:case="4">攀岩活动</td>
+            <td th:case="5">游泳活动</td>
+        </div>
+        <td th:text="${#dates.format(activitieInfo.starttime,'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${#dates.format(activitieInfo.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${activitieInfo.site}"></td>
+        <td th:text="${activitieInfo.peoples}"></td>
+        <td>
+            <span th:if="${activitieInfo.starttime<=date}">
+                <a th:href="@{'/delete?id='+${activitieInfo.id}}">删除</a>
+            </span>
+            <span th:if="${activitieInfo.starttime>date}">
+                <a th:href="@{'/toUpdate?id='+${activitieInfo.id}}">修改</a>
+            </span>
+        </td>
+    </tr>
+    <tr style="text-align: center">
+        <td colspan="7">
+            <span th:if="${curPage<=1}">
+              首页
+              上一页
+            </span>
+            <span th:if="${curPage>1}">
+                <a th:href="@{/index}">首页</a>
+                <a th:href="@{'/index?curPage='+${curPage-1}}">上一页</a>
+            </span>
+            <span th:if="${curPage==totalPages}">
+               下一页
+               尾页
+            </span>
+            <span th:if="${curPage<totalPages}">
+                <a th:href="@{'/index?curPage='+${curPage+1}}">下一页</a>
+                <a th:href="@{'/index?curPage='+${totalPages}}">尾页</a>
+            </span>
+    </tr>
+
+    </tbody>
+</table>
+</body>
+</html>
